@@ -16,3 +16,12 @@ SCRAPERS = {
     "淘宝": TaotianScraper,
     "offerstar": OfferstarScraper,
 }
+
+from .expanded import (MeituanScraper, SfScraper, MindrayScraper, MideaScraper,
+                       ByteAnnouncementScraper, DewuAnnouncementScraper, SanyAnnouncementScraper)
+
+SCRAPERS.update({
+    "美团": MeituanScraper, "顺丰": SfScraper, "迈瑞医疗": MindrayScraper, "美的": MideaScraper,
+    "字节跳动（公告）": ByteAnnouncementScraper, "得物（公告）": DewuAnnouncementScraper,
+    "三一（公告）": SanyAnnouncementScraper,
+})

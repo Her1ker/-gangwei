@@ -6,6 +6,13 @@ Campus Radar 配置文件
 # ==================== 监控公司开关 ====================
 # 把不想监控的公司设为 False 即可
 ENABLED_COMPANIES = {
+    "美团": True,
+    "顺丰": True,
+    "迈瑞医疗": True,
+    "美的": True,
+    "字节跳动（公告）": True,
+    "得物（公告）": True,
+    "三一（公告）": True,
     "京东": True,
     "快手": True,
     "小红书": True,

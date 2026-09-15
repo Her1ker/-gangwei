@@ -102,6 +102,10 @@ def generate_brief(jobs: List[JobItem], new_keys: set, all_raw_count: dict) -> s
         lines.append(f"| {company} | {cnt} | {hit} | {new if new else '-'} |")
     lines.append("")
 
+    lines.append("> 来源说明：字节跳动、得物、三一为 OfferStar 聚合校招公告，非官网完整岗位列表；其他新增公司为官网岗位。公告存在收录延迟。")
+    lines.append("> 空白地点表示源站未提供，届别和专业限制请以详情页为准。获取失败不代表没有岗位。")
+    lines.append("")
+
     # 投递进度概览
     app_section = _build_application_section()
     if app_section:
@@ -153,7 +157,7 @@ def generate_brief(jobs: List[JobItem], new_keys: set, all_raw_count: dict) -> s
         lines.append("")
 
     lines.append("---")
-    lines.append("*本简报由 Campus Radar 自动生成。如某公司持续显示 0 岗位，可能是其校招尚未开启，开启后会自动出现。*")
+    lines.append("*本简报由 Campus Radar 自动生成。0 表示本次未获取到记录，不代表没有招聘；获取失败请检查运行日志。*")
 
     content = "\n".join(lines)
 

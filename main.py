@@ -58,7 +58,7 @@ def main():
         except Exception as e:
             print(f"  ❌ 抓取失败: {e}")
             traceback.print_exc()
-            raw_counts[name] = 0
+            raw_counts[name] = "获取失败"
 
     # 加载通用抓取源（零代码添加的新公司）
     from scrapers.generic import GenericScraper
@@ -74,7 +74,7 @@ def main():
         except Exception as e:
             print(f"  ❌ 抓取失败: {e}")
             traceback.print_exc()
-            raw_counts[name] = 0
+            raw_counts[name] = "获取失败"
 
     # 保存到数据库
     if full_mode:
