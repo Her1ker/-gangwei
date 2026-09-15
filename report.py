@@ -14,20 +14,20 @@ def _match_keywords(job: JobItem) -> bool:
     text = f"{job.title} {job.category} {job.tags}"
     # 优先按类别命中
     for cat_kw in config.CATEGORY_KEYWORDS:
-        if cat_kw in job.category:
+        if cat_kw.casefold() in job.category.casefold():
             return True
     # 再按标题关键词兜底
     all_kw = []
     for kws in config.KEYWORDS.values():
         all_kw.extend(kws)
-    return any(kw in text for kw in all_kw)
+    return any(kw.casefold() in text.casefold() for kw in all_kw)
 
 
 def _enrich_category(job: JobItem) -> JobItem:
     """如果 category 不含关注方向关键词，用 guess_category 补充"""
     from scrapers.base import guess_category
     # 检查现有 category 是否已包含关注方向
-    has_focus = any(kw in job.category for kw in config.CATEGORY_KEYWORDS)
+    has_focus = any(kw.casefold() in job.category.casefold() for kw in config.CATEGORY_KEYWORDS)
     if not has_focus:
         guessed = guess_category(job.title)
         # 只保留关注方向的类别（产品/运营/电商），不追加技术等
@@ -78,7 +78,7 @@ def generate_brief(jobs: List[JobItem], new_keys: set, all_raw_count: dict) -> s
     lines = []
     lines.append(f"# 📋 秋招雷达日报 · {today}")
     lines.append("")
-    lines.append(f"> 自动抓取于 {now} ｜ 关注方向：电商 / 产品 / 运营 ｜ 目标城市：{('、'.join(config.TARGET_CITIES)) or '全国'}")
+    lines.append(f"> 自动抓取于 {now} ｜ 关注方向：{' / '.join(config.KEYWORDS)} ｜ 目标城市：{('、'.join(config.TARGET_CITIES)) or '全国'}")
     lines.append("")
 
     # 公司排序：官网优先，offerstar 最后
@@ -129,12 +129,12 @@ def generate_brief(jobs: List[JobItem], new_keys: set, all_raw_count: dict) -> s
     else:
         lines.append("## 🆕 今日新增岗位")
         lines.append("")
-        lines.append("今日暂无新增的目标岗位。各公司官网一旦放出新的电商/产品/运营岗，次日简报会自动列出。")
+        lines.append("今日暂无新增的目标岗位。各公司官网一旦放出新的目标方向岗位，次日简报会自动列出。")
         lines.append("")
 
     # 在招岗位存量（命中的，便于随时查阅）
     if existing_jobs:
-        lines.append("## 📌 当前在招（电商/产品/运营方向）")
+        lines.append(f"## 📌 当前在招（{'/'.join(config.KEYWORDS)}）")
         lines.append("")
         lines.append("<details><summary>点击展开全部在招岗位</summary>")
         lines.append("")

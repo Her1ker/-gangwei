@@ -4,7 +4,7 @@
 import requests
 from urllib.parse import quote
 from bs4 import BeautifulSoup
-from .base import BaseScraper, JobItem
+from .base import BaseScraper, JobItem, guess_category
 import config
 
 
@@ -16,10 +16,13 @@ class OfferstarScraper(BaseScraper):
         cfg = config.COMPANY_CONFIG["offerstar"]
         title = cfg["title"]
         channel = cfg["channel"]
-        # 对产品和运营两个方向各请求一次，合并去重
+        # 按配置搜索相关方向，合并去重；生成日报时再细筛
         seen_ids = set()
         all_items = []
-        for position_kw in ["产品", "运营"]:
+        positions = cfg["positions"]
+        if isinstance(positions, str):
+            positions = [positions]
+        for position_kw in positions:
             url = f"{self.BASE}?title={quote(title)}&positions={quote(position_kw)}&channel={quote(channel)}"
             try:
                 r = self.session.get(url, timeout=config.REQUEST_TIMEOUT)
@@ -71,8 +74,4 @@ class OfferstarScraper(BaseScraper):
         return items
 
     def _guess_category(self, text):
-        cats = []
-        for kw in config.CATEGORY_KEYWORDS:
-            if kw in text:
-                cats.append(kw)
-        return "、".join(cats)
+        return guess_category(text)

@@ -49,7 +49,7 @@ def guess_category(title: str) -> str:
     cats = []
     # 产品/运营类（用户关注方向）
     for kw, kws in config.KEYWORDS.items():
-        if kw in title or any(k in title for k in kws):
+        if kw.casefold() in title.casefold() or any(k.casefold() in title.casefold() for k in kws):
             cats.append(kw)
     # 技术类
     tech_kw = ["算法", "工程师", "开发", "架构", "前端", "后端", "客户端",
